@@ -2,13 +2,6 @@ import mysql.connector
 import random
 import os
 
-# mydb = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     passwd="Deja.barclay1",
-#     database="bankingsystem"
-# )
-
 mydb = mysql.connector.connect(
     host="localhost",
     user=os.environ.get("user"),
