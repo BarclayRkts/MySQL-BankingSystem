@@ -9,9 +9,6 @@ mydb = mysql.connector.connect(
     database=os.environ.get("dbName")
 )
 
-mycursor = mydb.cursor()
-
-
 def menu():
     print("\v        CUSTOMER ACCOUNT BANKING MANAGEMENT SYSTEM\v")
     print("        ---------WELCOME TO THE MAIN MENU--------- \v")
@@ -24,8 +21,25 @@ def menu():
     print("7. Exit \v")
 
     choice = input("Enter your choice: ")
+    
     if(int(choice) == 1):
         createAccount()
+    elif(int(choice == 2)):
+        updateInfo()
+    elif(int(choice) == 3):
+        transaction()
+    elif(int(choice == 4)):
+        checkAccount()
+    elif(int(choice == 5)):
+        removeAccount()
+    elif(int(choice) == 6):
+        viewCustomers()
+    elif(int(choice) == 7):
+        exit
+    else:
+        print("You Entered an Invalid Number. Try Again.")
+        print(">------------------------------------------------")
+        menu()
 
 def createAccount():
     id = random.randint(0, 1000000)
@@ -49,5 +63,40 @@ def createAccount():
     print(">\v------------------------------------------------")
     print("Acoount Successfully Created!")
     print(">------------------------------------------------\v")
+    taskDonePrompt()
+
+def updateInfo():
+    print("info updated")
+
+def transaction():
+    print("transaction completed")
+
+def checkAccount():
+    print("transaction completed")
+
+def removeAccount():
+    print("transaction completed")
+
+def viewCustomers():
+    print(">\v------------------------------------------------")
+    print("Customer List")
+    print(">------------------------------------------------\v")
+
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT firstName, lastName, address, phoneNumber FROM Customer")
+    for i in mycursor:
+      print(i)
+
+    taskDonePrompt()
+
+def taskDonePrompt():
+    answer = input("Do you want to perform another task? (Y or N): ")
+    if (answer == 'Y'):
+        menu()
+    elif (answer == "N"):
+        exit()
+    else:
+        print("Invaild Command. Try Again.")
+        taskDonePrompt()
 
 menu()    
