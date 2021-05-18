@@ -24,13 +24,13 @@ def menu():
     
     if(int(choice) == 1):
         createAccount()
-    elif(int(choice == 2)):
+    elif(int(choice) == 2):
         updateInfo()
     elif(int(choice) == 3):
         transaction()
-    elif(int(choice == 4)):
+    elif(int(choice)  == 4 ):
         checkAccount()
-    elif(int(choice == 5)):
+    elif(int(choice) == 5):
         removeAccount()
     elif(int(choice) == 6):
         viewCustomers()
@@ -66,7 +66,52 @@ def createAccount():
     taskDonePrompt()
 
 def updateInfo():
-    print("info updated")
+    print("updating Information!!!!!!!!!!!!!!!!!!!!")
+
+    print("ENTER A TASK NUMBER")
+    print(">------------------------------------------------")
+    print("1. UPDATE Phone Number")
+    print("2. UPDATE Address")
+    print("3. CANCEL UPDATE")
+    choice = input("Enter your choice: ")
+
+    if(int(choice) == 1):
+        personToUpdate = input("What is the last name of the Person you want to update? ")
+        replaceValue = input("What is the new phone number? ")
+        mycursor = mydb.cursor()
+        mycursor.execute('SELECT lastName FROM Customer WHERE lastName = %s', (personToUpdate,))
+        checklastName = mycursor.fetchone()
+        if not checklastName:
+            print('lastName does not exist cannot Update')
+        else:
+            mycursor.execute("UPDATE Customer SET phoneNumber = %s WHERE lastName = %s", (replaceValue, personToUpdate ))
+            mydb.commit()
+            print(">------------------------------------------------")
+            print("Phone Number was Successfully Updated")
+            print(">------------------------------------------------")
+            taskDonePrompt()
+    elif(int(choice) == 2):
+        personToUpdate = input("What is the last name of the Person you want to update? ")
+        replaceValue = input("What is the new adress? ")
+        mycursor = mydb.cursor()
+        mycursor.execute('SELECT lastName FROM Customer WHERE lastName = %s', (personToUpdate,))
+        checklastName = mycursor.fetchone()
+        if not checklastName:
+            print('lastName does not exist cannot Update')
+        else:
+            mycursor.execute("UPDATE Customer SET address = %s WHERE lastName = %s", (replaceValue, personToUpdate ))
+            mydb.commit()
+            print(">------------------------------------------------")
+            print("Address was Successfully Updated")
+            print(">------------------------------------------------")
+            taskDonePrompt()
+    elif(int(choice) == 3):
+        menu()
+    else:
+        print("You Entered an Invalid Number. Try Again.")
+        print(">------------------------------------------------")
+        updateInfo()
+
 
 def transaction():
     print("transaction completed")
@@ -78,22 +123,22 @@ def removeAccount():
     print("transaction completed")
 
 def viewCustomers():
-    print(">\v------------------------------------------------")
+    print("\v")
     print("Customer List")
-    print(">------------------------------------------------\v")
 
     mycursor = mydb.cursor()
     mycursor.execute("SELECT firstName, lastName, address, phoneNumber FROM Customer")
     for i in mycursor:
+      print(">------------------------------------------------")
       print(i)
 
     taskDonePrompt()
 
 def taskDonePrompt():
     answer = input("Do you want to perform another task? (Y or N): ")
-    if (answer == 'Y'):
+    if (answer == 'Y' or 'y'):
         menu()
-    elif (answer == "N"):
+    elif (answer == "N" or 'n'):
         exit()
     else:
         print("Invaild Command. Try Again.")
