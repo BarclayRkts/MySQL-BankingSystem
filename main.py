@@ -1,6 +1,7 @@
+import os
 import mysql.connector
 import random
-import os
+from datetime import datetime
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -8,6 +9,8 @@ mydb = mysql.connector.connect(
     passwd=os.environ.get("passwd"),
     database=os.environ.get("dbName")
 )
+# mycursor = mydb.cursor()
+# mycursor.execute("CREATE TABLE Transactions (id int PRIMARY KEY AUTO_INCREMENT, date DATETIME, accountId int, FOREIGN KEY(accountId) REFERENCES Customer(id), title varchar(80), type varchar(20), total double NOT NULL)")
 
 def menu():
     print("\v        CUSTOMER ACCOUNT BANKING MANAGEMENT SYSTEM\v")
@@ -114,7 +117,42 @@ def updateInfo():
 
 
 def transaction():
-    print("transaction completed")
+    mycursor = mydb.cursor()
+
+    accountNumeber = input("What is your account number? ")
+    typeOfTransaction = input("What type of transaction is this? (Deposit or Withdrawing) ")
+    title = input("What is the name of this transaction? ")
+    amount = input("What is the amount that you are Depositing or Withdrawing? ")
+    date = datetime.now()
+
+    formatted_date = date.strftime('%Y-%m-%d %H:%M:%S')
+
+    mycursor.execute('SELECT id FROM Customer WHERE id = %s', (int(accountNumeber),))
+
+    checkId = mycursor.fetchone()
+    if not checkId:
+        print('Account Number does not exist\v')
+        answer = input("Do you want to Try Agin? (Y or N): ")
+        if (answer == 'Y' or 'y'):
+            transaction()
+        elif (answer == "N" or 'n'):
+            menu()
+        else:
+            print("Invaild Command. Try Again.")
+            menu()
+    else:
+        data =(formatted_date, int(accountNumeber), title, typeOfTransaction, float(amount) ) 
+        sql_insert = "INSERT INTO Transactions (date, accountId, title, type, total) VALUES (%s,%s,%s,%s,%s)"
+        
+        mycursor.execute(sql_insert,data)
+        mydb.commit()
+
+        print(">\v------------------------------------------------")
+        print("Transaction Complete!")
+        print(">------------------------------------------------\v")
+
+    taskDonePrompt()
+
 
 def checkAccount():
     print("transaction completed")
@@ -147,6 +185,7 @@ def viewCustomers():
       print(">------------------------------------------------")
       print(i)
 
+    print("\v")
     taskDonePrompt()
 
 def taskDonePrompt():
