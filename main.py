@@ -120,7 +120,22 @@ def checkAccount():
     print("transaction completed")
 
 def removeAccount():
-    print("transaction completed")
+    personToDelete = input("What is the lastName of the Customer you want to delete? ")
+    mycursor = mydb.cursor()
+
+    mycursor.execute('SELECT lastName FROM Customer WHERE lastName = %s', (personToDelete,))
+
+    checklastName = mycursor.fetchone()
+    if not checklastName:
+        print('lastName does not exist')
+    else:
+        mycursor.execute("DELETE FROM Customer WHERE lastName = %s", (personToDelete,))
+        mydb.commit()
+        print(">------------------------------------------------")
+        print("Customer was Successfully Deleted")
+        print(">------------------------------------------------")
+        
+    taskDonePrompt()
 
 def viewCustomers():
     print("\v")
