@@ -9,8 +9,7 @@ mydb = mysql.connector.connect(
     passwd=os.environ.get("passwd"),
     database=os.environ.get("dbName")
 )
-# mycursor = mydb.cursor()
-# mycursor.execute("CREATE TABLE Transactions (id int PRIMARY KEY AUTO_INCREMENT, date DATETIME, accountId int, FOREIGN KEY(accountId) REFERENCES Customer(id), title varchar(80), type varchar(20), total double NOT NULL)")
+
 
 def menu():
     print("\v        CUSTOMER ACCOUNT BANKING MANAGEMENT SYSTEM\v")
@@ -18,7 +17,7 @@ def menu():
     print("1. Create new account")
     print("2. Update information of existing account")
     print("3. For transaction")
-    print("4. Check the details existing account")
+    print("4. Check the details of existing account")
     print("5. Removing existing account")
     print("6. View customer list")
     print("7. Exit \v")
@@ -150,7 +149,17 @@ def transaction():
 
 
 def checkAccount():
-    print("transaction completed")
+    accNum = input("What is your account number?")
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT * FROM Customer WHERE id=%s", (int(accNum),))
+
+    for i in mycursor:
+      print(">------------------------------------------------")
+      print(i)
+      print(">------------------------------------------------")
+
+    print("\v")
+    taskDonePrompt()
 
 def removeAccount():
     personToDelete = input("What is the lastName of the Customer you want to delete? ")
