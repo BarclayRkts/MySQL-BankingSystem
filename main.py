@@ -131,15 +131,10 @@ def transaction():
 
     checkId = mycursor.fetchone()
     if not checkId:
-        print('Account Number does not exist\v')
-        answer = input("Do you want to Try Agin? (Y or N): ")
-        if (answer == 'Y' or 'y'):
-            transaction()
-        elif (answer == "N" or 'n'):
-            menu()
-        else:
-            print("Invaild Command. Try Again.")
-            menu()
+        print(">------------------------------------------------")
+        print("Account Number does not exist. Returning to Menu.")
+        print(">------------------------------------------------\v")
+        menu()
     else:
         data =(formatted_date, int(accountNumeber), title, typeOfTransaction, float(amount) ) 
         sql_insert = "INSERT INTO Transactions (date, accountId, title, type, total) VALUES (%s,%s,%s,%s,%s)"
@@ -147,7 +142,7 @@ def transaction():
         mycursor.execute(sql_insert,data)
         mydb.commit()
 
-        print(">\v------------------------------------------------")
+        print(">------------------------------------------------")
         print("Transaction Complete!")
         print(">------------------------------------------------\v")
 
